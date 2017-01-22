@@ -1,0 +1,55 @@
+<% include partials/header %>
+<div class="middle-rect">
+	<h1>Leave the Rest to us</h1>
+	<div class="wrapper">
+
+	<br>
+		<form action="/sleep" method="POST" class="frm">
+			Hi, what's your name?<br>
+			<input type="text" name="name" required><br>
+
+			How many hours of sleep do you usually sleep every night?<br>
+			<input type="number" name="hours" min="1" max="24" step="0.5" style="width:50px;" required><br>
+
+			How old are you?<br>
+			<input type="number" name="age" min="0" max="130" style="width:50px;" required><br>
+
+			How active are you throughout the day? (5 meaning most)<br>
+			<label class="radio-inline">
+			  <input type="radio" name="active" id="active1" value="1" required> 1
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="active" id="active2" value="2"> 2
+			</label>	
+			<label class="radio-inline">
+			  <input type="radio" name="active" id="active3" value="3"> 3
+			</label>	
+			<label class="radio-inline">
+			  <input type="radio" name="active" id="active4" value="4"> 4
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="active" id="active5" value="5"> 5
+			</label><br>
+
+
+			How stressed do you feel?<br>
+			<label class="radio-inline">
+			  <input type="radio" name="stress" id="stress1" value="1" required> 1
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="stress" id="stress2" value="2"> 2
+			</label>	
+			<label class="radio-inline">
+			  <input type="radio" name="stress" id="stress3" value="3"> 3
+			</label>	
+			<label class="radio-inline">
+			  <input type="radio" name="stress" id="stress4" value="4"> 4
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="stress" id="stress5" value="5"> 5
+			</label><br>
+			<div style="margin-top:3em;text-align: center;"><button>Next</button></div>
+		</form>
+	</div>
+</div>
+<% include partials/footer %>

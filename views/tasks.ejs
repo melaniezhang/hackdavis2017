@@ -1,0 +1,31 @@
+<% include partials/header %>
+
+<div class="middle-rect">
+	<h1>Leave the Rest to us</h1>
+	<div class="wrapper" style="text-align:center!important;">
+
+	<form action="/results" method="POST" class="task_form frm">
+		Task Name 1<br>
+		<input type="text" name="task_name0" required><br>
+		Time needed (minutes)<br>
+		<input type="number" name="time0" step="15" required><br>
+		Due date (optional)<br>
+		<input type="date" name="due_date0"><br><br>
+		<center><button class="delete">Show me my schedule!</button></center>
+	</form>
+	<center><br><button class="newTask">Add new task</button></center>
+
+	<script>
+		var task_counter = 2;
+		$(".newTask").on("click", function() {
+			var itemToAppend = "<br>Task Name "+task_counter+" <br><input type=\"text\" name=\"task_name"+task_counter+"\" required><br> Time needed (minutes)<br> <input type=\"number\" name=\"time"+task_counter+"\" step=\"15\" required><br> Due date (optional)<br> <input type=\"date\" name=\"due_date"+task_counter+"\"><br>";
+			$(".task_form").append(itemToAppend);
+			$(".delete").remove();
+			$(".task_form").append("<br><center><button class=\"delete\">Show me my schedule!</button></center>");
+			task_counter++;
+		});
+	</script>
+</div>
+
+	</div>
+<% include partials/footer %>

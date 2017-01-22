@@ -1,0 +1,100 @@
+<% include partials/header %>
+<style>
+body {
+	user-select:none;
+}
+</style>
+<script>
+	(function() {
+  var $doc = $(document);
+  var isDown = false;
+
+  function bind() {
+    $doc.mousedown(toggleDown);
+    $doc.mouseup(toggleDown);
+    $doc.on('mouseout', 'label', updateChildCheckboxes);
+  }
+
+  function toggleDown() {
+    isDown = !isDown;
+  }
+
+  //assumes the "this" context is a jquery-extended DOM element
+  function updateChildCheckboxes() {
+    var $els = $(this).find('input[type="checkbox"]');
+    check($els);
+  }
+
+  function check($elements) {
+    if (isDown && $elements.prop('checked')) {
+      $elements.prop('checked', false);
+    } else if (isDown) {
+      $elements.prop('checked', true);
+    }
+  }
+
+  $(bind);
+}());
+</script>
+
+<h1>Leave the Rest to us</h1>
+<div class="wrapper-schedule">
+<p style="font-size:16pt!important;">Now click and drag in order to mark off the times that you will be busy this week (e.g. school, work, etc.)</p><br><br><br>
+	<form action="/tasks" method="POST" id="schedform">
+		<% for (var i = 0; i < 24 * 4; i++) { %>
+			<label class="myCheckbox">
+				<input>
+				<span style ="background-color:transparent;border:none;font-size:10px">
+					<% if (Math.floor(i / 4) % 12 == 0) { %>
+					12
+					<%} else { %>
+					<%= Math.floor(i / 4) % 12 %>
+					<%}%>:
+					<% if ((i % 4) * 15 == 0) {%>
+					00
+					<%} else { %>
+					<%=(i % 4) * 15%>
+					<%}%>
+					<% if (Math.floor((i / 4) / 12) == 1) { %>
+					PM
+					<%} else { %>
+					AM
+					<%}%>
+
+				</span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="0-<%=i%>" class="mcheck">
+				<span></span>
+			</label>	
+			<label class="myCheckbox">
+				<input type="checkbox" name="1-<%=i%>" class="mcheck">
+				<span></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="2-<%=i%>" class="mcheck">
+				<span></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="3-<%=i%>" class="mcheck">
+				<span></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="4-<%=i%>" class="mcheck">
+				<span></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="5-<%=i%>" class="mcheck">
+				<span></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="6-<%=i%>" class="mcheck">
+				<span></span>
+			</label><div></div>
+		<%} %>
+		<br><br>
+		<button style="font-size:16pt!important;">Next</button>
+		<br><br>
+	</form>
+</div>
+<% include partials/footer %>
