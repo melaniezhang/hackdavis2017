@@ -31,15 +31,9 @@ app.get("/sleep", function(req, res) {
 	res.render("sleep");
 });
 
-app.post("/schedule", function(req, res) {
-	wakeupTime = req.body.wakeup;
-	hoursAsleep = req.body.changed_hours;
-
-	res.render("schedule");
-});
-
 /* POST REQUESTS */
-app.post("/sleep", function(req, res) {
+
+app.post("/sleep_results", function(req, res) {
 	userName = req.body.name;
 	var hours = req.body.hours;
 	var age = req.body.age;
@@ -58,11 +52,21 @@ app.post("/sleep", function(req, res) {
 	res.render("sleep_results", {sleep_result: sleep_result});
 });
 
+app.post("/schedule", function(req, res) {
+	wakeupTime = req.body.wakeup;
+	hoursAsleep = req.body.changed_hours;
+	calendar1 = calendar;
+	markOffSleeping(wakeupTime, hoursAsleep);
+	
+	res.render("schedule");
+});
+
 app.post("/tasks", function (req, res) {
 
 	var fixedTaskTimes = Object.keys(req.body).sort();
 
 	if (fixedTaskTimes.length != 0) {
+		// convert checkbox name (time) to calendar index
 		fixedTaskTimes.forEach(function(time) {
 			var minutes_index;
 
@@ -77,8 +81,6 @@ app.post("/tasks", function (req, res) {
 			calendar[parseInt(index)].occupied = true;
 		});
 	}
-
-	markOffSleeping(wakeupTime, hoursAsleep);
 
 	res.render("tasks");
 });
@@ -100,15 +102,18 @@ app.post("/results", function(req, res) {
 
 	variable_tasks_array.sort(compare);
 	console.log(variable_tasks_array);
+
 	/* insert each task with largest first*/
 	for (var i = 0; i < variable_tasks_array.length; i++) {
+		// parse due_date
 		var year = parseInt(variable_tasks_array[i].due_date.split('-')[0]);
 		var month = parseInt(variable_tasks_array[i].due_date.split('-')[1]) - 1;
 		var day = parseInt(variable_tasks_array[i].due_date.split('-')[2]);
 		var date = new Date(year, month, day);
 
-		var DoW = date.getDay();
-		var DoW_index = (parseInt(DoW) + 1) * 24 * 4; // due end of day
+		// get day from day of week
+		var due_date = date.getDay();
+		var DoW_index = (parseInt(due_date) + 1) * 24 * 4; // due end of day
 
 		/* inserting algorithms */
 		// make gap array
@@ -116,8 +121,9 @@ app.post("/results", function(req, res) {
 		getGaps(gaps);
 		
 		// stuff it in days with much free time of days with 
-		var free_time_arr = [];
+		var free_time_arr = []; // contains free time sums for each day
 
+		// calculate total free (gap sum) time for each day
 		for (var x = 0; x < 7; x++){
 			var day_sum = 0;
 
@@ -146,9 +152,10 @@ app.post("/results", function(req, res) {
 			var gapSumDow = free_time_arr[z].dow;
 			var chosen_dow;
 
-			if (gapSumDow > DoW) {
-				chosen_dow = DoW;
-			} // use DoW
+			// choose which day to insert task into
+			if (gapSumDow > due_date) {
+				chosen_dow = due_date;
+			} // use due date
 			else {
 				chosen_dow = gapSumDow;
 			} // use gapSumDow
@@ -183,7 +190,7 @@ app.post("/results", function(req, res) {
 					break;
 				}
 			}*/
-
+	console.log(calendar);
 	res.render("results", {calendar: calendar, userName: userName});
 });
 
@@ -193,6 +200,7 @@ app.listen(3000, function(){
 	console.log("The HackDavis server has started!");
 });
 
+/* functions!! */
 function initializeCalendar() {
 	var result = [];
 
@@ -211,14 +219,16 @@ function initializeCalendar() {
 			result.push(timeslot);
 		}
 	}
-
 	return result;
 };
 
 function markOffSleeping(wakeupTime, hoursAsleep) {
-	var blocksAsleep = hoursAsleep * 4;
-	var startingIndex = parseInt(parseInt(wakeupTime[0] * 10) + parseInt((wakeupTime[1]) * 4)) + (parseInt((wakeupTime[3]) * parseInt(10 + wakeupTime[4]) % 15));
+	console.log(wakeupTime);
+	console.log(hoursAsleep);
 
+	var blocksAsleep = hoursAsleep * 4;
+	var startingIndex = parseInt(parseInt(wakeupTime[0]) * 10 * 4 + parseInt(wakeupTime[1]) * 4 + (parseInt(wakeupTime[3]) * 10 + parseInt(wakeupTime[4])) % 15);
+	console.log(startingIndex);
 
 	for (var i = 0; i < 7; i++) {
 		for (var t = 0; t < blocksAsleep; t++) {
@@ -290,7 +300,7 @@ function getGaps(gaps) {
 		var gap_length = 0;
 		var start_index = day * 24 * 4;
 
-		for (var j = day * 24 * 4; j < (day + 1) * 24 * 4; j++) {
+		for (var j = start_index; j < (day + 1) * 24 * 4; j++) {
 			if (j % (24 * 4) != 0 &&
 				(!calendar[j].occupied &&
 			    calendar[j-1].occupied)) 
@@ -320,6 +330,7 @@ function getGaps(gaps) {
 	}
 }
 
+// unused
 function skipBlocksInCol(gaps, col) {
 	var numOfGaps = gaps[col].length;
 	var n = Math.floor((numOfGaps-0)*Math.random());

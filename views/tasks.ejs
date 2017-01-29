@@ -2,26 +2,26 @@
 
 <div class="middle-rect">
 	<h1>Leave the Rest to us</h1>
-	<div class="wrapper" style="text-align:center!important;">
-
+	<div class="wrapper">
+	Great! Now input the tasks you need to complete by the end of this week below. Please enter time in 15 minute increments.<br><br>
 	<form action="/results" method="POST" class="task_form frm">
 		Task Name 1<br>
-		<input type="text" name="task_name0" required><br>
-		Time needed (minutes)<br>
-		<input type="number" name="time0" step="15" required><br>
+		<input type="text" name="task_name0" placeholder="e.g. studying, laundry"><br>
+		Minutes needed<br>
+		<input type="number" name="time0" step="15"><br>
 		Due date (optional)<br>
 		<input type="date" name="due_date0"><br><br>
-		<center><button class="delete">Show me my schedule!</button></center>
+		<button class="delete">Show me my schedule!</button>
 	</form>
-	<center><br><button class="newTask">Add new task</button></center>
+	<br><button class="newTask">Add another task</button>
 
 	<script>
 		var task_counter = 2;
 		$(".newTask").on("click", function() {
-			var itemToAppend = "<br>Task Name "+task_counter+" <br><input type=\"text\" name=\"task_name"+task_counter+"\" required><br> Time needed (minutes)<br> <input type=\"number\" name=\"time"+task_counter+"\" step=\"15\" required><br> Due date (optional)<br> <input type=\"date\" name=\"due_date"+task_counter+"\"><br>";
+			var itemToAppend = "Task Name "+task_counter+" <br><input type=\"text\" name=\"task_name"+task_counter+"\"><br> Time needed (minutes)<br> <input type=\"number\" name=\"time"+task_counter+"\" step=\"15\"><br> Due date (optional)<br> <input type=\"date\" name=\"due_date"+task_counter+"\"><br>";
 			$(".task_form").append(itemToAppend);
 			$(".delete").remove();
-			$(".task_form").append("<br><center><button class=\"delete\">Show me my schedule!</button></center>");
+			$(".task_form").append("<br><button class=\"delete\">Show me my schedule!</button>");
 			task_counter++;
 		});
 	</script>

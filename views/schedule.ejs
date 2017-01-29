@@ -1,11 +1,11 @@
 <% include partials/header %>
 <style>
-body {
-	user-select:none;
-}
+	body {
+		user-select:none;
+	}
 </style>
 <script>
-	(function() {
+(function() {
   var $doc = $(document);
   var isDown = false;
 
@@ -39,34 +39,76 @@ body {
 
 <h1>Leave the Rest to us</h1>
 <div class="wrapper-schedule">
-<p style="font-size:16pt!important;">Now click and drag in order to mark off the times that you will be busy this week (e.g. school, work, etc.)</p><br><br><br>
-	<form action="/tasks" method="POST" id="schedform">
+	<br>
+	<div class="c-caption">
+		<span style="font-size:16pt!important;">
+			On the template below, click and drag to mark off the times that you will be busy this week (e.g. school, work, etc.)
+		</span>
+	</div>
+	<br><br><br>
+	<form action="/tasks" method="POST" style="margin-top:25px;padding-bottom:25px;">
+		<% console.log(calendar1[0]);%>
+		<% console.log(calendar1[1]);%>
 		<% for (var i = 0; i < 24 * 4; i++) { %>
+			<% if (calendar1[i+1].asleep) {continue}%>
+
 			<label class="myCheckbox">
 				<input>
 				<span style ="background-color:transparent;border:none;font-size:10px">
+					<% if ((i % 4) * 15 == 0) {%>
+
 					<% if (Math.floor(i / 4) % 12 == 0) { %>
 					12
 					<%} else { %>
-					<%= Math.floor(i / 4) % 12 %>
-					<%}%>:
-					<% if ((i % 4) * 15 == 0) {%>
-					00
-					<%} else { %>
-					<%=(i % 4) * 15%>
+					<%= Math.floor(i / 4) % 12 %>:
 					<%}%>
+					00
 					<% if (Math.floor((i / 4) / 12) == 1) { %>
 					PM
 					<%} else { %>
 					AM
 					<%}%>
+					<%}%>
+
 
 				</span>
 			</label>
+			<% if (calendar1[i+1].asleep) {%>
+
+			<label class="myCheckbox">
+				<input type="checkbox" name="0-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;border-right:0;"></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="1-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;border-right:0;"></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="2-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;border-right:0;"></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="3-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;border-right:0;"></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="4-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;border-right:0;"></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="5-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;border-right:0;"></span>
+			</label>
+			<label class="myCheckbox">
+				<input type="checkbox" name="6-<%=i%>" class="mcheck">
+				<span style="opacity:.3;background-color:#000;border-bottom:0;"></span>
+			</label><div></div>	
+
+			<%} else {%>
 			<label class="myCheckbox">
 				<input type="checkbox" name="0-<%=i%>" class="mcheck">
 				<span></span>
-			</label>	
+			</label>
 			<label class="myCheckbox">
 				<input type="checkbox" name="1-<%=i%>" class="mcheck">
 				<span></span>
@@ -91,9 +133,11 @@ body {
 				<input type="checkbox" name="6-<%=i%>" class="mcheck">
 				<span></span>
 			</label><div></div>
+			<%}%>
+
 		<%} %>
-		<br><br>
-		<button style="font-size:16pt!important;">Next</button>
+
+		<button style="font-size:16pt!important;margin-top:35px;">Next</button>
 		<br><br>
 	</form>
 </div>

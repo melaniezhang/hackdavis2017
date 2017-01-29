@@ -1,27 +1,43 @@
 <% include partials/header %>
 <h1>Leave the Rest to us</h1>
-<div class="wrapper-r results"><center>
-Here's your schedule, <%= userName %>. </center><br><br>
+<div class="wrapper results">
+	<div class="c-caption" style="padding-top:10px;">
+		All done! Here's your schedule for the week, <%= userName %>. Rest easy!<br><br>
+	</div>
 
+
+	<!-- tasks are off by 1... -->
 	<%for (var c = 0; c < 24 * 4; c++) {%>
+		<%if(calendar[c + 1].asleep) {continue}%>
 		<%if (c % 4 == 0) {%>
-			<span class="timeslot" style="text-align:right;padding-right:7px;border-right:0;border-left:0;"><%= c / 4 %>:00</span>
+			<span class="timeslot" style="text-align:right;padding-right:30px;border:none;color:#fff;font-size:10px;">
+
+			<% if (Math.floor(c / 4) % 12 == 0) { %>
+				12:00
+			<%} else { %>
+				<%= Math.floor(c / 4) % 12 %>:00
+			<%}%>
+ 			<% if (Math.floor((c / 4) / 12) == 1) { %>
+				PM
+			<%} else { %>
+				AM
+			<%}%>
+			</span>
 		<%} else {%>
-			<span class="timeslot" style="border-right:0;border-left:0;"></span>
+			<span class="timeslot" style="border:none;"></span>
 		<%}%>
 		<%for (var i = 0; i < 7; i++) {%>
-			<%if (calendar[24 * 4 * i + c].asleep == true) {%>
-				<span class="timeslot asleep"></span>
-			<%} else if (calendar[24 * 4 * i + c].variable == true) { %>
-				<span class="timeslot variable"><%= calendar[24*4*i+c].name%></span>
-			<%} else if (calendar[24 * 4 * i + c].occupied == true) {%>
+		<% var counter = i * 24 * 4 + c;%> <!-- incrementing this goes out of bounds -->
+			<%if (calendar[counter].variable) { %>
+				<span class="timeslot variable"><%= calendar[counter].name%></span>
+			<%} else if (calendar[counter].occupied) {%>
 				<span class="timeslot occupied"></span>
 			<%} else {%>
 				<span class="timeslot free"></span>
 			<%}%>
 		<%}%>
-		<div></div>
 	<%}%>
+	<div style="opacity:0;">padding..</div>
 </div>	
 
 
